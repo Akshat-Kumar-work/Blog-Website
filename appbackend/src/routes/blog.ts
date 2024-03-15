@@ -19,14 +19,23 @@ export const blogRouter = new Hono<{
 
 //we have to initialize the prisma inside the route because we cannot access the env varibales globally, we can acces it by route content
 
-//middleware
+//auth middleware
 blogRouter.use("/*",async(c,next)=>{
-    const authHeader =  c.req.header("Authorization") || "";
+    try{
+        const authHeader =  c.req.header("Authorization") || "";
     const result = await verify(authHeader,c.env.JWT_SECRET);
     if(result){
         c.set("userId",result.id);
     await    next();
     }else{
+        c.status(403);
+        return c.json({
+            mess:"you are not logged in "
+        })
+    }
+    }
+    catch(e){
+        console.log(e);
         c.status(403);
         return c.json({
             mess:"you are not logged in "
