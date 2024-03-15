@@ -5,18 +5,19 @@ import { PrismaClient } from '@prisma/client/edge';
 //accelerate is also needed for connection pooling
 import {withAccelerate} from '@prisma/extension-accelerate';
 
-import { decode,sign,verify } from 'hono/jwt';
+import { sign } from 'hono/jwt';
 
 export const userRouter = new Hono<{
     Bindings:{
         DATABASE_URL:string;
+        JWT_SECRET:string;
       }
 }>();
 
 //we have to initialize the prisma inside the route because we cannot access the env varibales globally, we can acces it by route content
 
 
-userRouter.post('/singnup', async (c) => {
+userRouter.post('/signup', async (c) => {
 
     //getting body
     //here we are using .json() because we dont have middlewares like express express.json() to parse the req to json
@@ -37,9 +38,9 @@ userRouter.post('/singnup', async (c) => {
         }
       });
   
-      const secret =`${body.password}${body.username}`;
+    
   
-      const jwt = await sign({id:user.id},secret);
+      const jwt = await sign({id:user.id},c.env.JWT_SECRET);
   
     return c.text(jwt)
   
@@ -51,7 +52,7 @@ userRouter.post('/singnup', async (c) => {
   
   });
   
-userRouter.post('/api/v1/user/singnin',async (c) => {
+userRouter.post('/singin',async (c) => {
   
     const body = await c.req.json();
     try{
@@ -70,10 +71,10 @@ userRouter.post('/api/v1/user/singnin',async (c) => {
         c.status(403);
         return c.json({message:'Invalid credentials'});
       }
-      const secret =`${body.password}${body.username}`;
+     
       const jwt = await sign({
         id:user.id
-      },secret);
+      },c.env.JWT_SECRET);
   
       return c.text(jwt);
     }
