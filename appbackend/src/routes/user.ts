@@ -6,6 +6,9 @@ import { PrismaClient } from '@prisma/client/edge';
 import {withAccelerate} from '@prisma/extension-accelerate';
 
 import { sign } from 'hono/jwt';
+import {signupInput} from '@akshatcode/common-validations'
+
+
 
 export const userRouter = new Hono<{
     Bindings:{
@@ -22,6 +25,13 @@ userRouter.post('/signup', async (c) => {
     //getting body
     //here we are using .json() because we dont have middlewares like express express.json() to parse the req to json
     const body = await c.req.json();
+
+    const {success} = signupInput.safeParse(body);
+    if(!success){
+      return c.json({
+        mess:"Input not correct"
+      })
+    }
   
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
