@@ -5,7 +5,8 @@ import { PrismaClient } from '@prisma/client/edge';
 //accelerate is also needed for connection pooling
 import {withAccelerate} from '@prisma/extension-accelerate';
 
-import { decode,verify } from 'hono/jwt';
+import { verify } from 'hono/jwt';
+import {createBlogInput,updateBlog} from "@akshatcode/common-validations"
 
 export const blogRouter = new Hono<{
     Bindings:{
@@ -49,6 +50,12 @@ blogRouter.post('/blog',async (c) => {
     const body = await c.req.json();
     const userId = c.get("userId");
 
+    const{success} = createBlogInput.safeParse(body);
+    if(!success){
+        return c.json({
+            mess:"input is incorrect"
+        })
+    }
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
       }).$extends(withAccelerate());
@@ -75,13 +82,19 @@ blogRouter.post('/blog',async (c) => {
   
 blogRouter.put('/update/blog', async (c) => {
     const body = await c.req.json();
+    const{success} = updateBlog.safeParse(body);
+    if(!success){
+        return c.json({
+            mess:"input incorrect"
+        })
+    }
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     try{
         const result = await prisma.blog.update({
             where:{
-                id: body.id
+                id: Number(body.id)
             },
             data:{
                 title:body.title,

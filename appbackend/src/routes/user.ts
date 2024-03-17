@@ -6,7 +6,9 @@ import { PrismaClient } from '@prisma/client/edge';
 import {withAccelerate} from '@prisma/extension-accelerate';
 
 import { sign } from 'hono/jwt';
-import {signupInput} from '@akshatcode/common-validations'
+
+import {signupInput , signinInput } from "@akshatcode/common-validations";
+
 
 
 
@@ -69,6 +71,13 @@ userRouter.post('/singin',async (c) => {
       const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
       }).$extends(withAccelerate());
+
+      const {success} = signinInput.safeParse(body);
+      if(!success){
+        return c.json({
+          mess:"input not correct"
+        })
+      }
   
       const user = await prisma.user.findFirst({
         where:{
