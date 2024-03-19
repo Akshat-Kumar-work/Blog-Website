@@ -8,7 +8,7 @@ const Auth = ( {type}:{type:"signup"|"signin"}) => {
 
 
                 <div className="flex justify-center flex-col items-center">
-                <div className=" text-3xl font-extrabold">{type=="signup"?"Create an Account":"Login into your Account"}</div>
+                <div className=" text-3xl font-extrabold">{type=="signup"?"Create an Account":"Login your Account"}</div>
                 <div className={`opacity-50 flex space-x-3 ${type=="signup"?"visible":"invisible"}`}>
                 <p> Already have an account? </p>
                 <Link to={"/signin"}>Login</Link>

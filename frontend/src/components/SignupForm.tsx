@@ -1,25 +1,36 @@
 import { useState } from "react"
 import { SignupInput } from "@akshatcode/common-validations";
+import { apiConnector,URL } from "../operations/connect";
 
 
 const SignupForm = () => {
-
+ console.log("url",URL)
     const [signupInputs,setSignUpInputs] = useState <SignupInput> ({
         username:"",
         password:"",
         name:""
     });
 
-    const HandleSubmit = ()=>{
+    const HandleSubmit = async()=>{
+      try{
+        const response  = await apiConnector('POST',`${URL}/user/signup`,{signupInputs});
+        const jwt = response.data;
+        localStorage.setItem("token",jwt);
+        console.log(response);
+      }
+      catch(e){
+        console.log(e);
+        alert("error while signing up")
+      }
 
     }
   return (
 
-<form onSubmit={HandleSubmit} className=" ml-40 mt-10 flex flex-col ">
+<form onSubmit={HandleSubmit} className=" ml-11 md:ml-40 mt-10 flex flex-col ">
 
   <label className="block">
     <span className="block text-sm font-medium text-slate-700">Username</span>
-    <input type="email" className="peer ..." onChange={(e)=>setSignUpInputs( {...signupInputs , username:e.target.value} )} placeholder="akshat@gmail.com"/>
+    <input type="email" className="peer ... " onChange={(e)=>setSignUpInputs( {...signupInputs , username:e.target.value} )} placeholder="akshat@gmail.com"/>
     <p className="mt-2 invisible peer-invalid:visible text-pink-600 text-sm">
       Please provide a valid username
     </p>
@@ -52,7 +63,7 @@ const SignupForm = () => {
    </button>
 
 </form>
-  )
+  );
 }
 
-export default SignupForm
+export default SignupForm;

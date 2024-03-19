@@ -1,6 +1,6 @@
 import { SigninInput } from "@akshatcode/common-validations";
 import { useState } from "react";
-
+import { apiConnector,URL } from "../operations/connect";
 
 const SigninForm = () => {
     const [signInInputs, setSignInInputs] = useState <SigninInput> ({
@@ -8,12 +8,22 @@ const SigninForm = () => {
         password:""
     })
 
-    const HandleSubmit=()=>{
+    const HandleSubmit = async()=>{
+      try{
+        const response  = await apiConnector('POST',`${URL}/user/singin`,{signInInputs});
+        const jwt = response.data;
+        localStorage.setItem("token",jwt);
+        console.log(response);
+      }
+      catch(e){
+        console.log(e);
+        alert("error while signing in")
+      }
 
     }
 
   return (
-    <form onSubmit={HandleSubmit} className=" ml-40 mt-10 flex flex-col ">
+    <form onSubmit={HandleSubmit} className=" ml-11 md:ml-40 mt-10 flex flex-col ">
 
   <label className="block">
     <span className="block text-sm font-medium text-slate-700">Username</span>
