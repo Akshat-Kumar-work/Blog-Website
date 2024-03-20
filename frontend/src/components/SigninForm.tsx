@@ -43,7 +43,7 @@ const SigninForm = () => {
     <form onSubmit={HandleSubmit} className=" ml-11 md:ml-40 mt-10 flex flex-col ">
 
   <label className="block">
-    <span className="block text-sm font-medium text-slate-700">Username</span>
+    <span className="block text-sm font-medium text-slate-700">Email</span>
     <input type="email" className="peer ..." onChange={(e)=>setSignInInputs( {...signInInputs , username:e.target.value} )} placeholder="akshat@gmail.com"/>
     <p className="mt-2 invisible peer-invalid:visible text-pink-600 text-sm">
       Please provide a valid username
@@ -54,7 +54,7 @@ const SigninForm = () => {
   
   <label className="block">
     <span className="block text-sm font-medium text-slate-700">Password</span>
-    <input type="text" className="peer ..." onChange={(e)=>setSignInInputs( {...signInInputs , password:e.target.value} )} placeholder="codingiscool"/>
+    <input type="password" className="peer ..." onChange={(e)=>setSignInInputs( {...signInInputs , password:e.target.value} )} placeholder="codingiscool"/>
     <p className="mt-2 invisible peer-invalid:visible text-pink-600 text-sm">
       Please provide a valid password.
     </p>
