@@ -11,7 +11,6 @@ import {signupInput , signinInput } from "@akshatcode/common-validations";
 
 
 
-
 export const userRouter = new Hono<{
     Bindings:{
         DATABASE_URL:string;
@@ -52,7 +51,7 @@ userRouter.post('/signup', async (c) => {
   
     
   
-      const jwt = await sign({id:user.id},c.env.JWT_SECRET);
+    const jwt = await sign({id:user.id},c.env.JWT_SECRET);
     
       c.status(200);
     return c.json({
@@ -74,15 +73,16 @@ userRouter.post('/singin',async (c) => {
       const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
       }).$extends(withAccelerate());
-
+      console.log(body)
       const {success} = signinInput.safeParse(body);
       if(!success){
+        c.status(411)
         return c.json({
           mess:"input not correct"
         })
       }
   
-      const user = await prisma.user.findFirst({
+      const user = await prisma.user.findUnique({
         where:{
           username:body.username,
           password: body.password
@@ -97,6 +97,8 @@ userRouter.post('/singin',async (c) => {
       const jwt = await sign({
         id:user.id
       },c.env.JWT_SECRET);
+
+      console.log("jwt",jwt)
       
       c.status(200)
       return c.json(

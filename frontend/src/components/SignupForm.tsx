@@ -13,9 +13,9 @@ const SignupForm = () => {
 
     const HandleSubmit = async()=>{
       try{
-        const response  = await apiConnector('POST',`${URL}/user/signup`,{signupInputs});
+        const response  = await apiConnector('POST',`${URL}/user/signup`,signupInputs);
         const jwt = response.data;
-        localStorage.setItem("token",jwt);
+        localStorage.setItem("token",JSON.stringify(jwt));
         console.log(response);
       }
       catch(e){

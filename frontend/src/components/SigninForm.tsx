@@ -1,6 +1,7 @@
 import { SigninInput } from "@akshatcode/common-validations";
 import { useState } from "react";
 import { apiConnector,URL } from "../operations/connect";
+import axios from "axios";
 
 const SigninForm = () => {
     const [signInInputs, setSignInInputs] = useState <SigninInput> ({
@@ -10,10 +11,10 @@ const SigninForm = () => {
 
     const HandleSubmit = async()=>{
       try{
-        const response  = await apiConnector('POST',`${URL}/user/singin`,{signInInputs});
-        const jwt = response.data;
-        localStorage.setItem("token",jwt);
-        console.log(response);
+       console.log("inside handlesubmit ")
+        // const response  = await apiConnector('POST',`${URL}/user/singin`,signInInputs);
+        const reponse = await axios.get(`http://127.0.0.1:8787`);
+        console.log("response",reponse);
       }
       catch(e){
         console.log(e);
@@ -36,10 +37,10 @@ const SigninForm = () => {
 
   
   <label className="block">
-    <span className="block text-sm font-medium text-slate-700">Name</span>
+    <span className="block text-sm font-medium text-slate-700">Password</span>
     <input type="text" className="peer ..." onChange={(e)=>setSignInInputs( {...signInInputs , password:e.target.value} )} placeholder="codingiscool"/>
     <p className="mt-2 invisible peer-invalid:visible text-pink-600 text-sm">
-      Please provide a valid email address.
+      Please provide a valid password.
     </p>
   </label>
 
