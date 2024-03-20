@@ -1,9 +1,12 @@
 import { useState } from "react"
 import { SignupInput } from "@akshatcode/common-validations";
 import { apiConnector,URL } from "../operations/connect";
+import { useNavigate } from "react-router-dom";
+
 
 
 const SignupForm = () => {
+    const navigate = useNavigate();
  console.log("url",URL)
     const [signupInputs,setSignUpInputs] = useState <SignupInput> ({
         username:"",
@@ -11,12 +14,14 @@ const SignupForm = () => {
         name:""
     });
 
-    const HandleSubmit = async()=>{
+    const HandleSubmit = async(e:React.FormEvent<HTMLFormElement>)=>{
+      e.preventDefault();
       try{
         const response  = await apiConnector('POST',`${URL}/user/signup`,signupInputs);
-        const jwt = response.data;
+        const jwt = response.data.data;
         localStorage.setItem("token",JSON.stringify(jwt));
-        console.log(response);
+        navigate("/blogs")
+        
       }
       catch(e){
         console.log(e);

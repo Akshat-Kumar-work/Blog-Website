@@ -126,15 +126,25 @@ blogRouter.get('/getBlog/:id',async(c)=>{
         const result = await prisma.blog.findFirst({
             where:{
                 id:Number(id)
+            },
+            select:{
+                id:true,
+                title:true,
+                content:true,
+                author:{
+                    select:{name:true}
+                }
             }
         })
 
+        c.status(200);
         return c.json({
             data:result
         })
     }
     catch(e){   
         console.log(e);
+        c.status(411)
         return c.json({
             mess: "unable to get the blog for given id"
         })

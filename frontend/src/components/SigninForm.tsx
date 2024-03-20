@@ -1,20 +1,25 @@
 import { SigninInput } from "@akshatcode/common-validations";
 import { useState } from "react";
 import { apiConnector,URL } from "../operations/connect";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const SigninForm = () => {
+  const navigate = useNavigate();
     const [signInInputs, setSignInInputs] = useState <SigninInput> ({
         username:"",
         password:""
     })
 
-    const HandleSubmit = async()=>{
+    const HandleSubmit = async(e:React.FormEvent<HTMLFormElement>)=>{
+      e.preventDefault();
       try{
        console.log("inside handlesubmit ")
-        // const response  = await apiConnector('POST',`${URL}/user/singin`,signInInputs);
-        const reponse = await axios.get(`http://127.0.0.1:8787`);
-        console.log("response",reponse);
+        const response  = await apiConnector('POST',`${URL}/user/singin`,signInInputs);
+        const jwt = response.data.data;
+        localStorage.setItem("token",JSON.stringify(jwt));
+        navigate("/blogs")
+        console.log(response);
       }
       catch(e){
         console.log(e);

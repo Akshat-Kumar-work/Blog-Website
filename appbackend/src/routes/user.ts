@@ -73,8 +73,9 @@ userRouter.post('/singin',async (c) => {
       const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
       }).$extends(withAccelerate());
-      console.log(body)
+  
       const {success} = signinInput.safeParse(body);
+      
       if(!success){
         c.status(411)
         return c.json({
