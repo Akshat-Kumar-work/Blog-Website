@@ -2,9 +2,13 @@ import { SigninInput } from "@akshatcode/common-validations";
 import { useState } from "react";
 import { apiConnector,URL } from "../operations/connect";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setToken ,setLogin } from "../store/authSlice";
 
 
 const SigninForm = () => {
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
     const [signInInputs, setSignInInputs] = useState <SigninInput> ({
         username:"",
@@ -17,7 +21,14 @@ const SigninForm = () => {
        console.log("inside handlesubmit ")
         const response  = await apiConnector('POST',`${URL}/user/singin`,signInInputs);
         const jwt = response.data.data;
+
+
+
         localStorage.setItem("token",JSON.stringify(jwt));
+
+        dispatch(setToken(jwt));
+        dispatch(setLogin(true));
+
         navigate("/blogs")
         console.log(response);
       }

@@ -9,6 +9,9 @@ import { sign } from 'hono/jwt';
 
 import {signupInput , signinInput } from "@akshatcode/common-validations";
 
+import { verify } from 'hono/jwt';
+
+
 
 
 export const userRouter = new Hono<{
@@ -111,3 +114,43 @@ userRouter.post('/singin',async (c) => {
       return c.text('unable to sign in')
     }
   });
+
+
+userRouter.get('/userDetails',async(c)=>{
+              try{
+                const authHeader =  c.req.header("Authorization") || "";
+                console.log("auth header",authHeader)
+                  const result = await verify(authHeader,c.env.JWT_SECRET);
+
+                  //if verified hai toh
+                  if(result){
+                    const prisma = new PrismaClient({
+                      datasourceUrl: c.env.DATABASE_URL,
+                    }).$extends(withAccelerate());
+
+                    const dbresult = await prisma.user.findUnique({
+                      where:{
+                        id:result.id
+                      }
+                    })
+
+                    c.status(200)
+                    return c.json({
+                      details:dbresult
+                    })
+              
+                }else{
+                c.status(403);
+                return c.json({
+                    mess:"you are not logged in "
+                })
+                }
+            }
+            catch(e){
+                console.log(e);
+                c.status(403);
+                return c.json({
+                    mess:"you are not logged in "
+                })
+            }
+            })

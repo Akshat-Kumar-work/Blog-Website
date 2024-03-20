@@ -20,8 +20,7 @@ const SignupForm = () => {
         const response  = await apiConnector('POST',`${URL}/user/signup`,signupInputs);
         const jwt = response.data.data;
         localStorage.setItem("token",JSON.stringify(jwt));
-        navigate("/blogs")
-        
+        navigate("/signin")
       }
       catch(e){
         console.log(e);
