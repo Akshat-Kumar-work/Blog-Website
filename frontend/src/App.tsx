@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser  } from './store/authSlice';
 import { apiConnector,URL } from './operations/connect';
+import Home from './pages/Home';
 
 
 
@@ -44,6 +45,7 @@ function App() {
       <>
       <Appbar/>
       <Routes>
+      <Route path='/' element={<Home/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/signin' element={<Signin/>}/>
         <Route path='/blog/:id' element={<Blog/>}/>

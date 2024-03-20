@@ -19,9 +19,9 @@ const Appbar = () => {
   }
 
   return (
-    <div className=" border-b flex  justify-between w-full  px-16 py-4">
+    <div className=" border-b flex  justify-between w-full   md:px-16 md:py-4">
 
-        <Link to={"/"}><div>BlogSite</div></Link>
+        <Link to={"/"}><div>Blog Verse</div></Link>
 
       { login &&  <Link to={"/publish"}><div>New</div> </Link> }
 {    login &&    <Link to={"/blogs"} ><div>Blogs</div></Link>}
