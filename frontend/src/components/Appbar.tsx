@@ -19,24 +19,24 @@ const Appbar = () => {
   }
 
   return (
-    <div className=" border-b flex  justify-between w-full   md:px-16 md:py-4">
+    <div className=" border-b flex flex-row  justify-between w-full px-5 py-5  md:px-16 md:py-4 flex-wrap">
 
-        <Link to={"/"}><div>Blog Verse</div></Link>
+        <Link to={"/"}><div className=" p-3">Blog Verse</div></Link>
 
-      { login &&  <Link to={"/publish"}><div>New</div> </Link> }
-{    login &&    <Link to={"/blogs"} ><div>Blogs</div></Link>}
+      { login &&  <Link to={"/publish"}><div className=" p-3">New</div> </Link> }
+        {    login &&    <Link to={"/blogs"} ><div className=" p-3">Blogs</div></Link>}
 
          {      !login &&  <Link to={"/signin"}>
-          <div>Login</div>
+          <div className=" p-3">Login</div>
           </Link>}
 
-       {!login&& <Link to={"/signup"}><div>Signup</div></Link>}
+       {!login&& <Link to={"/signup"}><div className=" p-3">Signup</div></Link>}
 
           {
-            login && <button onClick={handleLogout}>Logout</button>
+            login && <button onClick={handleLogout} className=" p-3">Logout</button>
           }
 
-        {user && <div>{user?.name}</div>}
+        {user && <div className=" p-3">{user?.name}</div>}
         
     </div>
   )

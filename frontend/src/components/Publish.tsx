@@ -4,6 +4,7 @@ import { apiConnector ,URL} from "../operations/connect";
 import { useNavigate } from "react-router-dom";
 
 
+
 const Publish = () => {
     const navigate = useNavigate();
     const [blogContent, setBlogContent] = useState<CreateBlogInput>({
@@ -14,6 +15,10 @@ const Publish = () => {
     const handlePUblish = async(e:React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
        try{
+        console.log(blogContent.content)
+        if(blogContent.content===""){
+          return alert(" blog is empty");
+        }
         const jwt = localStorage.getItem("token");
         const jsonjwt = JSON.parse(`${jwt}`);
         const result = await apiConnector("POST",`${URL}/blog/blog`,blogContent,{Authorization:jsonjwt});

@@ -8,7 +8,7 @@ import Appbar from './components/Appbar';
 import Publish from './components/Publish';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser  } from './store/authSlice';
+import { setLogin, setUser  } from './store/authSlice';
 import { apiConnector,URL } from './operations/connect';
 import Home from './pages/Home';
 
@@ -27,6 +27,7 @@ function App() {
       console.log("token from redux",token);
      const result = await apiConnector("GET",`${URL}/user/userDetails`,null,{Authorization:token});
      dispatch(setUser(result.data.details));
+     dispatch(setLogin(true));
     }catch(e){
       console.log(e);
       console.log("err while fetching user details");
